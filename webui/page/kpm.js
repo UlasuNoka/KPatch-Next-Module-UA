@@ -1,6 +1,9 @@
 import { exec, toast } from 'kernelsu-alt';
 import { modDir, persistDir, superkey } from '../index.js';
 
+let allKpms = [];
+let searchQuery = '';
+
 async function getKpmInfo(path) {
     const result = await exec(`kptools -l -M ${path}`, { env: { PATH: `${modDir}/bin` } });
     if (import.meta.env.DEV) { // vite debug
@@ -69,7 +72,7 @@ function forgetModule(moduleName) {
 
 async function unloadModule(moduleName) {
     forgetModule(moduleName);
-    const result = await exec(`kpatch ${superkey} kpm unload ${moduleName}`,{ env: { PATH: `${modDir}/bin` } });
+    const result = await exec(`kpatch ${superkey} kpm unload ${moduleName}`, { env: { PATH: `${modDir}/bin` } });
     return result.errno === 0;
 }
 
@@ -79,7 +82,15 @@ async function loadModule(modulePath) {
 }
 
 async function refreshKpmList() {
-    const list = await getKpmList();
+    allKpms = await getKpmList();
+    renderKpmList();
+}
+
+async function renderKpmList() {
+    const list = allKpms.filter(module => {
+        const name = module.name || '';
+        return name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
     const container = document.getElementById('kpm-list');
 
     document.getElementById('no-module').classList.toggle('hidden', list.length > 0);
@@ -188,6 +199,42 @@ async function uploadAndLoadModule() {
         reader.readAsDataURL(file);
     };
     input.click();
+}
+
+export function initKPMPage() {
+    const searchBtn = document.getElementById('kpm-search-btn');
+    const searchBar = document.getElementById('kpm-search-bar');
+    const closeBtn = document.getElementById('close-kpm-search-btn');
+    const searchInput = document.getElementById('kpm-search-input');
+    const menuBtn = document.getElementById('kpm-menu-btn');
+    const menu = document.getElementById('kpm-menu');
+
+    searchBtn.onclick = () => {
+        searchBar.classList.add('show');
+        document.querySelectorAll('.search-bg').forEach(el => el.classList.add('hide'));
+        searchInput.focus();
+    };
+
+    closeBtn.onclick = () => {
+        searchBar.classList.remove('show');
+        document.querySelectorAll('.search-bg').forEach(el => el.classList.remove('hide'));
+        searchQuery = '';
+        searchInput.value = '';
+        renderKpmList();
+    };
+
+    searchInput.addEventListener('input', () => {
+        searchQuery = searchInput.value;
+        renderKpmList();
+    });
+
+    menuBtn.onclick = () => menu.show();
+
+    document.getElementById('refresh-kpm-list-menu').onclick = () => {
+        refreshKpmList();
+    };
+
+    refreshKpmList();
 }
 
 export { loadModule, refreshKpmList, uploadAndLoadModule }

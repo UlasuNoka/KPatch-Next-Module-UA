@@ -20,12 +20,14 @@ function setupExitBtn() {
 
 // Page switcher
 function switchPage(pageId, title, navId = null) {
-    document.getElementById('close-search-btn')?.click();
+    document.getElementById('close-kpm-search-btn')?.click();
+    document.getElementById('close-app-search-btn')?.click();
     document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === pageId));
     document.querySelector('.title').textContent = title;
 
     // Icon
     document.getElementById('home-icon').style.display = (pageId === 'home-page' ? 'flex' : 'none');
+    document.getElementById('kpm-icon').style.display = (pageId === 'kpm-page' ? 'flex' : 'none');
     document.getElementById('exclude-icon').style.display = (pageId === 'exclude-page' ? 'flex' : 'none');
 
     // Bottom Bar

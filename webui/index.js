@@ -143,6 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateBtnState(superkey);
     initInfo();
     excludeModule.initExcludePage();
+    kpmModule.initKPMPage();
 });
 
 // Overwrite default dialog animation

@@ -186,7 +186,7 @@ async function renderAppList() {
 function initExcludePage() {
     const searchBtn = document.getElementById('search-btn');
     const searchBar = document.getElementById('app-search-bar');
-    const closeBtn = document.getElementById('close-search-btn');
+    const closeBtn = document.getElementById('close-app-search-btn');
     const searchInput = document.getElementById('app-search-input');
     const menuBtn = document.getElementById('exclude-menu-btn');
     const menu = document.getElementById('exclude-menu');
