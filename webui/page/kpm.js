@@ -215,12 +215,15 @@ export function initKPMPage() {
         searchInput.focus();
     };
 
-    closeBtn.onclick = () => {
+    closeBtn.onclick = (e) => {
         searchBar.classList.remove('show');
         document.querySelectorAll('.search-bg').forEach(el => el.classList.remove('hide'));
         searchQuery = '';
         searchInput.value = '';
-        renderKpmList();
+        searchInput.blur();
+        if (e && e.isTrusted) {
+            renderKpmList();
+        }
     };
 
     searchInput.addEventListener('input', () => {

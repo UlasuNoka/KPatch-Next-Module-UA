@@ -198,12 +198,15 @@ function initExcludePage() {
         searchInput.focus();
     };
 
-    closeBtn.onclick = () => {
+    closeBtn.onclick = (e) => {
         searchBar.classList.remove('show');
         document.querySelectorAll('.search-bg').forEach(el => el.classList.remove('hide'));
         searchQuery = '';
         searchInput.value = '';
-        renderAppList();
+        searchInput.blur();
+        if (e && e.isTrusted) {
+            renderAppList();
+        }
     };
 
     searchInput.addEventListener('input', () => {
