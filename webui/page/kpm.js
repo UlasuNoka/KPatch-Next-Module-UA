@@ -175,23 +175,40 @@ async function uploadAndLoadModule() {
 
                 const info = await getKpmInfo(`${modDir}/tmp/${file.name}`);
                 if (info && info.name) {
-                    exec(`
-                        mkdir -p ${persistDir}/kpm
-                        cp -f ${modDir}/tmp/${file.name} ${persistDir}/kpm/${info.name}.kpm
-                    `);
+                    const dialog = document.getElementById('load-dialog');
+                    dialog.querySelector('#module-name').textContent = info.name;
+                    const checkbox = dialog.querySelector('md-checkbox');
+                    checkbox.checked = false;
+
+                    dialog.querySelector('.cancel').onclick = () => {
+                        dialog.close();
+                        exec(`rm -rf ${modDir}/tmp`);
+                    };
+
+                    dialog.querySelector('.confirm').onclick = async () => {
+                        if (!checkbox.checked) {
+                            await exec(`
+                                mkdir -p ${persistDir}/kpm
+                                cp -f "${modDir}/tmp/${file.name}" "${persistDir}/kpm/${info.name}.kpm"
+                            `);
+                        }
+
+                        const success = await loadModule(`${modDir}/tmp/${file.name}`);
+                        if (success) {
+                            toast(`Successfully loaded ${info.name}`);
+                            refreshKpmList();
+                        } else {
+                            toast(`Failed to load module ${info.name}`);
+                        }
+                        exec(`rm -rf ${modDir}/tmp`);
+                        dialog.close();
+                    };
+
+                    dialog.show();
                 } else {
                     toast(`Failed to get module info`);
-                    return;
+                    exec(`rm -rf ${modDir}/tmp`);
                 }
-
-                const success = await loadModule(`${modDir}/tmp/${file.name}`);
-                if (success) {
-                    toast(`Successfully loaded ${file.name}`);
-                    refreshKpmList();
-                } else {
-                    toast(`Failed to load module ${file.name}`);
-                }
-                exec(`rm -f ${modDir}/tmp`);
             } catch (e) {
                 toast(`Error: ${e.message}`);
             }

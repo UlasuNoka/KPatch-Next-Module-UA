@@ -249,6 +249,20 @@
                 <md-filled-button class="confirm" disabled>OK</md-filled-button>
             </div>
         </md-dialog>
+        <md-dialog id="load-dialog">
+            <div slot="headline">KPModule</div>
+            <div slot="content">
+                <div><span id="module-name"></span> will be loaded.</div>
+                <label class="checkbox-item">
+                    <md-checkbox></md-checkbox>
+                    <span>Load temporarily</span>
+                </label>
+            </div>
+            <div slot="actions">
+                <md-text-button class="cancel">Cancel</md-text-button>
+                <md-text-button class="confirm">Load</md-text-button>
+            </div>
+        </md-dialog>
         <md-dialog id="unload-dialog">
             <div slot="headline">KPModule</div>
             <div slot="content"></div>
