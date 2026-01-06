@@ -87,7 +87,7 @@ async function reboot(reason = "") {
 document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('[unresolved]').forEach(el => el.removeAttribute('unresolved'));
     const splash = document.getElementById('splash');
-    if (splash) setTimeout(() => splash.classList.add('show'), 50);
+    if (splash) setTimeout(() => splash.classList.add('show'), 20);
 
     setupRoute();
 
@@ -179,8 +179,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // splash screen
     if (splash) {
-        setTimeout(() => splash.classList.add('exit'), 100);
-        setTimeout(() => splash.remove(), 700);
+        setTimeout(() => splash.classList.add('exit'), 50);
+        setTimeout(() => splash.remove(), 400);
     }
 });
 

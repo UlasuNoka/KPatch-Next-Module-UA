@@ -37,6 +37,7 @@
     --md-sys-color-inverse-primary: var(--inversePrimary, #D0BCFF);
     --md-sys-color-surface-bright: var(--surfaceBright, #FEF7FF);
     --md-sys-color-surface-dim: var(--surfaceDim, #DED8E1);
+    --md-sys-color-tonal-surface: var(--tonalSurface, #F3EDF7);
     --md-sys-color-surface-container: var(--surfaceContainer, #F3EDF7);
     --md-sys-color-surface-container-lowest: var(--surfaceContainerLowest, #FFFFFF);
     --md-sys-color-surface-container-low: var(--surfaceContainerLow, #F7F2FA);
@@ -76,6 +77,7 @@
         --md-sys-color-inverse-primary: var(--inversePrimary, #6750A4);
         --md-sys-color-surface-bright: var(--surfaceBright, #3B383E);
         --md-sys-color-surface-dim: var(--surfaceDim, #141218);
+        --md-sys-color-tonal-surface: var(--tonalSurface, #211F26);
         --md-sys-color-surface-container: var(--surfaceContainer, #211F26);
         --md-sys-color-surface-container-lowest: var(--surfaceContainerLowest, #0F0D13);
         --md-sys-color-surface-container-low: var(--surfaceContainerLow, #1D1B20);

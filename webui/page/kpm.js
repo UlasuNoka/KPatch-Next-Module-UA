@@ -250,7 +250,9 @@ async function handleFileUpload(accept, containerId, onSelected) {
 }
 
 async function uploadAndLoadModule() {
+    const loadBtn = document.getElementById('load');
     handleFileUpload('.kpm', 'kpm-list', async (file, onProgress, signal) => {
+        loadBtn.classList.add('hide');
         const tmpPath = `${modDir}/tmp/${file.name}`;
         try {
             await exec(`mkdir -p ${modDir}/tmp && rm -rf ${modDir}/tmp/*`);
@@ -294,6 +296,8 @@ async function uploadAndLoadModule() {
         } catch (e) {
             exec(`rm -rf ${modDir}/tmp`);
             throw e;
+        } finally {
+            loadBtn.classList.remove('hide');
         }
     });
 }

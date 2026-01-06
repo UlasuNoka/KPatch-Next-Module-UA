@@ -267,7 +267,12 @@ function openOptionDialog(item) {
 }
 
 async function embedKPM() {
+    const embedBtn = document.getElementById('embed');
+    const startBtn = document.getElementById('start');
     handleFileUpload('.kpm', 'kpm-embed-list', async (file, onProgress, signal) => {
+        embedBtn.disabled = true;
+        startBtn.disabled = true;
+
         // Generate random filename
         const randName = Math.random().toString(36).substring(7) + '.kpm';
         const tmpPath = `${modDir}/tmp/${randName}`;
@@ -277,6 +282,9 @@ async function embedKPM() {
         } catch (e) {
             exec(`rm -f ${tmpPath}`);
             throw e;
+        } finally {
+            embedBtn.disabled = false;
+            startBtn.disabled = false;
         }
 
         const result = await exec(`kptools -l -M "${randName}"`, {
