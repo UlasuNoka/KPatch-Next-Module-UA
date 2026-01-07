@@ -5,6 +5,9 @@ KPNDIR="/data/adb/kp-next"
 PATH="$MODDIR/bin:$PATH"
 key="$1"
 
+PROP_FILE="$MODDIR/module.prop"
+PROP_BAK="$MODDIR/module.prop.bak"
+
 set_prop() {
     local prop="$1"
     local value="$2"
@@ -17,6 +20,14 @@ set_prop() {
     sed "s/^$prop=.*/$prop=$value/" "$file" > "$file.tmp"
     cat "$file.tmp" > "$file"
     rm -f "$file.tmp"
+}
+
+restore_prop_if_needed() {
+    if ! grep -q "^id=" "$PROP_FILE"; then
+        if [ -f "$PROP_BAK" ]; then
+            cp "$PROP_BAK" "$PROP_FILE"
+        fi
+    fi
 }
 
 active="Status: active 😊"
@@ -36,4 +47,6 @@ if [ -n "$key" ] && kpatch "$key" hello >/dev/null 2>&1; then
     string="$active | kpmodule: $KPM_COUNT 💉"
 fi
 
-set_prop "description" "$string" "$MODDIR/module.prop"
+restore_prop_if_needed
+
+set_prop "description" "$string" "$PROP_FILE"
