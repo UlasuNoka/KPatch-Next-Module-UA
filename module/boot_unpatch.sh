@@ -24,7 +24,7 @@ if [ ! -f kernel ]; then
 echo "- Unpacking boot image"
 magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
 if [ $? -ne 0 ]; then
-    >&2 echo "- Unpack error: $?"
+    >&2 echo "! Unpack error: $?"
     exit 1
   fi
 fi
@@ -38,13 +38,13 @@ if [ ! $(kptools -i kernel -l | grep patched=false) ]; then
     echo "- Unpatching kernel"
     kptools -u --image kernel.ori --out kernel
     if [ $? -ne 0 ]; then
-      >&2 echo "- Unpatch error: $?"
+      >&2 echo "! Unpatch error: $?"
       exit 1
     fi
     echo "- Repacking boot image"
     magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
     if [ $? -ne 0 ]; then
-      >&2 echo "- Repack error: $?"
+      >&2 echo "! Repack error: $?"
       exit 1
     fi
   fi
@@ -59,7 +59,8 @@ if [ -f "new-boot.img" ]; then
   flash_image new-boot.img "$BOOTIMAGE"
 
   if [ $? -ne 0 ]; then
-    >&2 echo "- Flash error: $?"
+    >&2 echo "! Flash error: $?"
+    save_image_to_storage "new-boot.img"
     exit 1
   fi
 fi

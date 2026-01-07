@@ -31,26 +31,26 @@ BOOTIMAGE=$2
 FLASH_TO_DEVICE=$3
 shift 2
 
-[ -z "$SUPERKEY" ] && { >&2 echo "- SuperKey empty!"; exit 1; }
-[ -e "$BOOTIMAGE" ] || { >&2 echo "- $BOOTIMAGE does not exist!"; exit 1; }
+[ -z "$SUPERKEY" ] && { >&2 echo "! SuperKey empty"; exit 1; }
+[ -e "$BOOTIMAGE" ] || { >&2 echo "! $BOOTIMAGE does not exist"; exit 1; }
 
 # Check for dependencies
-command -v magiskboot >/dev/null 2>&1 || { >&2 echo "- Command magiskboot not found!"; exit 1; }
-command -v kptools >/dev/null 2>&1 || { >&2 echo "- Command kptools not found!"; exit 1; }
+command -v magiskboot >/dev/null 2>&1 || { >&2 echo "! Command magiskboot not found"; exit 1; }
+command -v kptools >/dev/null 2>&1 || { >&2 echo "! Command kptools not found"; exit 1; }
 
 if [ ! -f kernel ]; then
 echo "- Unpacking boot image"
 magiskboot unpack "$BOOTIMAGE" >/dev/null 2>&1
   if [ $? -ne 0 ]; then
-    >&2 echo "- Unpack error: $?"
+    >&2 echo "! Unpack error: $?"
     exit 1
   fi
 fi
 
 if [ ! $(kptools -i kernel -f | grep CONFIG_KALLSYMS=y) ]; then
-	echo "- Patcher has Aborted!"
-	echo "- APatch requires CONFIG_KALLSYMS to be Enabled."
-	echo "- But your kernel seems NOT enabled it."
+	echo "! Patcher has Aborted."
+	echo "! APatch requires CONFIG_KALLSYMS to be Enabled."
+	echo "! But your kernel seems NOT enabled it."
 	exit 1
 fi
 
@@ -69,7 +69,7 @@ patch_rc=$?
 set +x
 
 if [ $patch_rc -ne 0 ]; then
-  >&2 echo "- Patch kernel error: $patch_rc"
+  >&2 echo "! Patch kernel error: $patch_rc"
   exit 1
 fi
 
@@ -77,13 +77,13 @@ echo "- Repacking boot image"
 magiskboot repack "$BOOTIMAGE" >/dev/null 2>&1
 
 if [ ! $(kptools -i kernel.ori -f | grep CONFIG_KALLSYMS_ALL=y) ]; then
-	echo "- Detected CONFIG_KALLSYMS_ALL is not set!"
-	echo "- APatch has patched but maybe your device won't boot."
-	echo "- Make sure you have original boot image backup."
+	echo "! Detected CONFIG_KALLSYMS_ALL is not set!"
+	echo "! APatch has patched but maybe your device won't boot."
+	echo "! Make sure you have original boot image backup."
 fi
 
 if [ $? -ne 0 ]; then
-  >&2 echo "- Repack error: $?"
+  >&2 echo "! Repack error: $?"
   exit 1
 fi
 
@@ -93,13 +93,15 @@ if [ "$FLASH_TO_DEVICE" = "true" ]; then
     echo "- Flashing new boot image"
     flash_image new-boot.img "$BOOTIMAGE"
     if [ $? -ne 0 ]; then
-      >&2 echo "- Flash error: $?"
+      >&2 echo "! Flash error: $?"
+      save_image_to_storage "new-boot.img"
       exit 1
     fi
   fi
 
   echo "- Successfully Flashed!"
 else
+  save_image_to_storage "new-boot.img"
   echo "- Successfully Patched!"
 fi
 

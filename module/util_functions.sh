@@ -278,6 +278,16 @@ flash_image() {
   return 0
 }
 
+save_image_to_storage() {
+  local IMAGE=$1
+  local DATE=$(date +%y%m%d%H%M)
+  local FILENAME="kpatch_next_patched_$DATE.img"
+  local OUT="/storage/emulated/0/Download/$FILENAME"
+
+  cp -f "$IMAGE" "$OUT"
+  echo "- Patched image saved to $OUT"
+}
+
 setup_mntpoint() {
   local POINT=$1
   [ -L $POINT ] && mv -f $POINT ${POINT}_link
