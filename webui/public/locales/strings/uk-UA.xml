@@ -35,7 +35,7 @@
     <string name="label_parameters">Параметри</string>
     <string name="label_load_temporarily">Завантажити тимчасово</string>
     <string name="label_show_system_app">Показати системні додатки</string>
-    <string name="label_system_default">За замовчуванням</string>
+    <string name="label_system_default">За замовчуванням системи</string>
     <string name="label_trigger_event">Викликати подію</string>
     <!-- Status -->
     <string name="status_not_installed">Не встановлено</string>
